@@ -17,6 +17,7 @@ Invenio-IIIF.
 .. toctree::
    :maxdepth: 2
 
+   overview
    installation
    configuration
    usage

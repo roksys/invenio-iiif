@@ -18,9 +18,7 @@ history = open('CHANGES.rst').read()
 tests_require = [
     'check-manifest>=0.25',
     'coverage>=4.0',
-    # FIXME: Remove elasticsearch once pytest-invenio have fixed the es import.
-    'elasticsearch>=5.0.0',
-    'elasticsearch-dsl>=5.0.0',
+    'urllib3>=1.21.1,<1.25',
     'invenio-db>=1.0.0b3',
     'isort>=4.3.3',
     'pydocstyle>=1.0.0',
