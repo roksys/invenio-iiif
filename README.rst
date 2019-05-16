@@ -1,6 +1,6 @@
 ..
     This file is part of Invenio.
-    Copyright (C) 2018 CERN.
+    Copyright (C) 2018-2019 CERN.
 
     Invenio is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
@@ -21,16 +21,13 @@
 .. image:: https://img.shields.io/pypi/v/invenio-iiif.svg
         :target: https://pypi.org/pypi/invenio-iiif
 
-Overview
-========
-The purpose of this package is to establish an entrypoint in your application,
-providing through this the RESTful serving of cropped images according to the
-IIIF library. A previewing functionality is also provided for images and pdf
-files.
+Invenio module to deliver images complying with IIIF standard.
 
-In the **Usage** section there are examples provided for the above cases.
+Features:
 
-IIIF API for Invenio.
+- Retrieve and serve image files using Invenio files.
+- Allows to define custom REST API endpoint prefix.
+- Provide celery task to create image thumbnails.
 
-Further documentation is available on
-https://invenio-iiif.readthedocs.io/
+* Free software: MIT license
+* Documentation: https://invenio-iiif.readthedocs.io/

@@ -6,89 +6,88 @@
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
-"""Image cropping and previewer API.
+"""Invenio module to serve images complying with IIIF standard.
 
 Invenio-IIIF integrates
-`Invenio-Records-Files <https://invenio-records-files.readthedocs.io>`_ with
-`Flask-IIIF <https://flask-iiif.readthedocs.io/en/latest/>`_
-to provide an endpoint for serving images
-with the International Image Interoperability Framework (IIIF) API standards.
-To be a bit more specific Invenio-IIIF is registering the provided endpoints
-from Flask-IIIF and it is using the files permissions provided
-by Invenio-Files-Rest.
-On top of that it is providing additional functionalities based on the IIIF
-standards. For more info check here (https://iiif.io/)
+`Invenio-Records-Files <https://invenio-records-files.rtfd.io>`_ with
+`Flask-IIIF <https://flask-iiif.rtfd.io>`_ to provide an endpoint for serving
+images complying with the `International Image Interoperability Framework
+(IIIF) <https://iiif.io/>`_ API standards.
+
+Invenio-IIIF registers the REST API endpoint provided by Flask-IIIF in the
+Invenio instance through entry points. On each request, it delegates
+authorization check to Invenio-Files-REST, load the file from the Invenio
+bucket and serve it after Flask-IIIF manipulation.
 
 Initialization
 --------------
-When this package is installed with Flask-IIIF it will register the second's
-blueprints under the configurable prefix in config['IIIF_API_PREFIX']
+You can define the IIIF API prefix by setting the Invenio configuration
+``IIIF_API_PREFIX``.
 
 Usage
 -----
-*Prerequisites*: Having an image or pdf stored under an Invenio File Object
-instance.
+*Prerequisites*: having an image or pdf stored as an Invenio File ObjectVersion
+instance in a Bucket.
 
->>> from invenio_iiif.utils import ui_iiif_image_url
+While Flask-IIIF requires in the path of the URL the UUID of the image to
+retrieve, Invenio needs a bucket id, version id and a key to be able to
+load the file via Invenio-Files-REST.
+Invenio-IIIF provides an utility to map such URLs, e.g. ``/v2/<uuid>/<path``,
+and convert the ``uuid`` to a concatenation of
+``<bucket_id>:<version_id>:<key>``.
 
->>> from invenio_files_rest.models import ObjectVersion
-
-obj = ObjectResource.get_object(bucket, key, version_id) or
- {'key': key, 'bucket': bucket,'version_id': version_id }
-
-Get the corresponding url to access the processed image with.
+Given an image object:
 
 .. code-block:: python
 
+    from invenio_files_rest.models import ObjectVersion
+    img_obj = ObjectResource.get_object(bucket='<bucket_id>', key='icon.png',
+                                        version_id='<version_id>')
+
+we can create the corresponding IIIF URL:
+
+.. code-block:: python
+
+    from invenio_iiif.utils import ui_iiif_image_url
     image_url = ui_iiif_image_url(
-        obj='previously referenced',version='v2', region='full', size='full',
-        rotation=0, quality='default', image_format='png'
+        obj=img_obj, version='v2', region='full', size='full', rotation=0,
+        quality='default', image_format='png'
     )
 
-Get the appropriate key to fetch the image with.
+The result will be
+``/<prefix>/v2/<bucket_id>:<version_id>:icon.png/full/full/0/default.png``
 
-.. code-block:: python
+If the file is a PDF and ImageMagick is installed in your system, then the
+module can extract the first page of the PDF and create a ``png`` from it.
 
-    from invenio_iiif.utils import iiif_image_key
-    image_key = iiif_image_key(obj)
+Authorization
+~~~~~~~~~~~~~
 
+Permissions to retrieve the requested images are delegated to
+Invenio-Files-REST. At each request, authorization is checked to ensure the
+user has sufficient privileges.
 
+Preview
+~~~~~~~
 
-Fetch the image or if it's a PDF it's first page as a png.
+Invenio-IIIF provides an extension for
+`Invenio-Previewer <https://invenio-previewer.rtfd.io>`_ to preview images.
+The previewer is exposed in the entry points.
 
-.. code-block:: python
+The template used to render the image can be configured with the configuration
+``IIIF_PREVIEW_TEMPLATE``.
 
-    from invenio_iiif.handlers import image_opener
-    image = image_opener(image_key)
+Thumbnails
+~~~~~~~~~~
 
-
-
-Check if the image can be previewed
-.. code-block:: python
-
-    from invenio_iiif.previewer import can_preview, preview
-    preview = can_preview(image)
-
-Render a template with a preview of the image.
-The template used is in config['IIIF_PREVIEW_TEMPLATE']
-The preview image settings are in config['IIIF_PREVIEWER_PARAMS']
-.. code-block:: python
-
-    if preview:
-       preview(image)
-
-If there is any need to precache the processed images, there is an async
-task provided that will fetch the images with the appropriate width
-triggerring that way their caching
+The module can precache thumbnails of requested images. It provides a celery
+task that will fetch a given image and resize it to create a thumbnail. It is
+then cached so it can be served efficiently.
 
 .. code-block:: python
 
     from invenio_iiif.tasks import create_thumbnail
     create_thumbnail(image_key, '250')
-
-Security protection is implemented via the protect_api which is fetching the
-image object from the invenio db having the permissions of the user checked
-there against the image's.
 
 """
 
