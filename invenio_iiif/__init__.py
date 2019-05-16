@@ -8,11 +8,14 @@
 
 """Image cropping and previewer API.
 
-Invenio-IIIF works together with the Flask-IIIF as well as
-invenio-records-files to provide an endpoint to serve RESTfuly images.
+Invenio-IIIF integrates
+`Invenio-Records-Files <https://invenio-records-files.readthedocs.io>`_ with
+`Flask-IIIF <https://flask-iiif.readthedocs.io/en/latest/>`_
+to provide an endpoint for serving images
+with the International Image Interoperability Framework (IIIF) API standards.
 To be a bit more specific Invenio-IIIF is registering the provided endpoints
-from Flask-IIIF and it's implementing file permissions, as well as file
-fetching from the DB.
+from Flask-IIIF and it is using the files permissions provided
+by Invenio-Files-Rest.
 On top of that it is providing additional functionalities based on the IIIF
 standards. For more info check here (https://iiif.io/)
 

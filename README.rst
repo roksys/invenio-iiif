@@ -21,6 +21,15 @@
 .. image:: https://img.shields.io/pypi/v/invenio-iiif.svg
         :target: https://pypi.org/pypi/invenio-iiif
 
+Overview
+========
+The purpose of this package is to establish an entrypoint in your application,
+providing through this the RESTful serving of cropped images according to the
+IIIF library. A previewing functionality is also provided for images and pdf
+files.
+
+In the **Usage** section there are examples provided for the above cases.
+
 IIIF API for Invenio.
 
 Further documentation is available on
