@@ -41,9 +41,14 @@ Given an image object:
 .. code-block:: python
 
     from invenio_files_rest.models import ObjectVersion
-    img_obj = ObjectResource.get_object(bucket='<bucket_id>', key='icon.png',
+    img_obj = ObjectVersion.get_object(bucket='<bucket_id>', key='icon.png',
                                         version_id='<version_id>')
-
+    or
+    img_ob = {
+        'bucket':'<bucket_id>',
+        'key':'icon.png',
+        'version_id':'<version_id>'
+    }
 we can create the corresponding IIIF URL:
 
 .. code-block:: python
@@ -64,7 +69,8 @@ Authorization
 ~~~~~~~~~~~~~
 
 Permissions to retrieve the requested images are delegated to
-Invenio-Files-REST. At each request, authorization is checked to ensure the
+`Invenio-Files-REST <https://invenio-files-rest.readthedocs.io/en/latest/>`_.
+At each request, authorization is checked to ensure the
 user has sufficient privileges.
 
 Preview
