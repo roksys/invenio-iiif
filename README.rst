@@ -29,5 +29,4 @@ Features:
 - Allows to define custom REST API endpoint prefix.
 - Provide celery task to create image thumbnails.
 
-* Free software: MIT license
-* Documentation: https://invenio-iiif.readthedocs.io/
+Further documentation available: https://invenio-iiif.readthedocs.io/

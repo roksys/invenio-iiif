@@ -22,8 +22,8 @@ tests_require = [
     'invenio-db>=1.0.0b3',
     'isort>=4.3.3',
     'pydocstyle>=1.0.0',
-    'pytest-cov>=1.8.0',
-    'pytest-invenio>=1.0.0',
+    'pytest-cov>=2.7.1',
+    'pytest-invenio>=1.1.0',
     'pytest-pep8>=1.0.6',
     'pytest>=3.7.0',
 ]
